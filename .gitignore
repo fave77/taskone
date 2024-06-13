@@ -12,6 +12,9 @@ node_modules/
 dist/
 build/
 
+# Coverage reports
+coverage
+
 # IDEs and editors
 .vscode/
 .idea/

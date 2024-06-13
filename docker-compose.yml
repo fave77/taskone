@@ -10,7 +10,8 @@ services:
       - db-service
       - cache-service
     environment:
-      - DATABASE_URL=${DATABASE_URL}
+      - APP_DATABASE_URL=${APP_DATABASE_URL}
+      - SCHEDULER_DATABASE_URL=${SCHEDULER_DATABASE_URL}
       - CACHE_URL=${CACHE_URL}
       - APP_PORT=${APP_PORT}
 
@@ -28,6 +29,16 @@ services:
       - "${DB_PORT}:${DB_PORT}"
     volumes:
       - db-data:/data/db
+
+  ui-service:
+    build: ./ui-service
+    restart: on-failure
+    ports:
+      - "${UI_PORT}:80"
+    depends_on:
+      - app-service
+    environment:
+      - API_URL=http://app-service:${APP_PORT}
 
 volumes:
   db-data:

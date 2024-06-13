@@ -1,5 +1,5 @@
 const logger = require('../utils/logger.util.js');
-const { createUserInDB, deleteUserInDB } = require('../utils/db.util.js');
+const {  createOrUpdateUserInDB, deleteUserInDB,  } = require('../utils/db.util.js');
 
 const accessUser = async (req, res) => {
   logger.info(`[accessUser] called with ---> ${JSON.stringify(req.body)}`);
@@ -8,7 +8,7 @@ const accessUser = async (req, res) => {
   // Check in the cache first
   const userExists = await req.cache.get(userId);
   if (userExists != 'true') {
-    await createUserInDB(userId);
+    await createOrUpdateUserInDB(userId);
     await req.cache.set(userId, 'true');
   }
 

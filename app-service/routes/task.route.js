@@ -1,18 +1,18 @@
 const { Router } = require('express');
 const taskRouter = Router();
+const ROUTES = require('../constants/route.constant');
 const { createTask, updateTask, deleteTask, listTask } = require('../handlers/task.handler');
 
 /**
  * @swagger
  * components:
  *   schemas:
- *     TaskReq:
+ *     CreateTaskReq:
  *       type: object
  *       properties:
  *         userId:
  *           type: string
- *           format: uuid
- *           example: '74967f6b-b752-4085-bb01-9a19f05d1be7'
+ *           example: 'johndoe713612'
  *         title:
  *           type: string
  *           example: 'Lorem Ipsum'
@@ -31,18 +31,60 @@ const { createTask, updateTask, deleteTask, listTask } = require('../handlers/ta
  *           type: string
  *           enum: ['INCOMPLETE', 'COMPLETE', 'CANCELLED']
  *           example: 'INCOMPLETE'
- *         notification:
- *           type: boolean
- *           example: false
- *         recurring:
+ *         reminder:
  *           type: object
  *           properties:
- *             interval:
- *               type: integer
- *               example: 36000
- *             nextOccurrence:
- *               type: integer
- *               example: 1719259317
+ *             pattern: 
+ *               type: string
+ *               example: '0 0 * * *'
+ *             preference:
+ *               type: string
+ *               example: 'ALERT'
+ *         recurrence:
+ *           type: string
+ *           example: '0 0 * * *'
+ * 
+ *     UpdateTaskReq:
+ *       type: object
+ *       properties:
+ *         userId:
+ *           type: string
+ *           example: 'johndoe713612'
+ *         taskId:
+ *           type: string
+ *           format: uuid
+ *           example: 'fd938d0b-cad2-4c2f-bc5c-5705bb2edc3f'
+ *         title:
+ *           type: string
+ *           example: 'Lorem Ipsum'
+ *         description:
+ *           type: string
+ *           example: 'dolor sit amet, consectetur adipiscing elit'
+ *         dueDate:
+ *           type: string
+ *           format: date
+ *           example: '2024-06-15'
+ *         priority:
+ *           type: string
+ *           enum: ['LOW', 'MEDIUM', 'HIGH']
+ *           example: 'LOW'
+ *         status:
+ *           type: string
+ *           enum: ['INCOMPLETE', 'COMPLETE', 'CANCELLED']
+ *           example: 'INCOMPLETE'
+ *         reminder:
+ *           type: object
+ *           properties:
+ *             pattern: 
+ *               type: string
+ *               example: '0 0 * * *'
+ *             preference:
+ *               type: string
+ *               example: 'ALERT'
+ *         recurrence:
+ *           type: string
+ *           example: '0 0 * * *'
+ * 
  *
  *     TaskResp:
  *       type: object
@@ -53,8 +95,7 @@ const { createTask, updateTask, deleteTask, listTask } = require('../handlers/ta
  *           example: 'fd938d0b-cad2-4c2f-bc5c-5705bb2edc3f'
  *         userId:
  *           type: string
- *           format: uuid
- *           example: '74967f6b-b752-4085-bb01-9a19f05d1be7'
+ *           example: 'johndoe713612'
  *         title:
  *           type: string
  *           example: 'Lorem Ipsum'
@@ -73,21 +114,19 @@ const { createTask, updateTask, deleteTask, listTask } = require('../handlers/ta
  *           type: string
  *           enum: ['INCOMPLETE', 'COMPLETE', 'CANCELLED']
  *           example: 'INCOMPLETE'
- *         notification:
- *           type: boolean
- *           example: false
- *         recurring:
+ *         reminder:
  *           type: object
  *           properties:
- *             interval:
- *               type: integer
- *               example: 36000
- *             nextOccurrence:
- *               type: integer
- *               example: 1719259317
+ *             pattern: 
+ *               type: string
+ *               example: '0 0 * * *'
+ *             preference:
+ *               type: string
+ *               example: 'ALERT'
+ *         recurrence:
+ *           type: string
+ *           example: '0 0 * * *'
  */
-
-
 
 /**
  * @swagger
@@ -99,7 +138,7 @@ const { createTask, updateTask, deleteTask, listTask } = require('../handlers/ta
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/TaskReq'
+ *             $ref: '#/components/schemas/CreateTaskReq'
  *     responses:
  *       200:
  *         description: Task created successfully
@@ -114,7 +153,7 @@ const { createTask, updateTask, deleteTask, listTask } = require('../handlers/ta
  *                 data:
  *                   $ref: '#/components/schemas/TaskResp'
  */
-taskRouter.post('/create-task', createTask);
+taskRouter.post(ROUTES.CREATE_TASK, createTask);
 
 /**
  * @swagger
@@ -126,7 +165,7 @@ taskRouter.post('/create-task', createTask);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/TaskReq'
+ *             $ref: '#/components/schemas/UpdateTaskReq'
  *     responses:
  *       200:
  *         description: Task updated successfully
@@ -141,7 +180,7 @@ taskRouter.post('/create-task', createTask);
  *                 data:
  *                   $ref: '#/components/schemas/TaskResp'
  */
-taskRouter.post('/update-task', updateTask);
+taskRouter.post(ROUTES.UPADTE_TASK, updateTask);
 
 /**
  * @swagger
@@ -159,6 +198,9 @@ taskRouter.post('/update-task', updateTask);
  *                 type: string
  *                 format: uuid
  *                 example: 'fd938d0b-cad2-4c2f-bc5c-5705bb2edc3f'
+ *               userId:
+ *                 type: string
+ *                 example: 'johndoe713612'
  *     responses:
  *       200:
  *         description: Task deleted successfully
@@ -171,7 +213,7 @@ taskRouter.post('/update-task', updateTask);
  *                   type: boolean
  *                   example: true
  */
-taskRouter.post('/delete-task', deleteTask);
+taskRouter.post(ROUTES.DELETE_TASK, deleteTask);
 
 /**
  * @swagger
@@ -185,14 +227,9 @@ taskRouter.post('/delete-task', deleteTask);
  *           schema:
  *             type: object
  *             properties:
- *               taskId:
- *                 type: string
- *                 format: uuid
- *                 example: 'fd938d0b-cad2-4c2f-bc5c-5705bb2edc3f'
  *               userId:
  *                 type: string
- *                 format: uuid
- *                 example: '74967f6b-b752-4085-bb01-9a19f05d1be7'
+ *                 example: 'johndoe713612'
  *     responses:
  *       200:
  *         description: Tasks listed successfully
@@ -210,6 +247,6 @@ taskRouter.post('/delete-task', deleteTask);
  *                     $ref: '#/components/schemas/TaskResp'
  *                   
  */
-taskRouter.post('/list-all-task', listTask);
+taskRouter.post(ROUTES.LIST_ALL_TASK, listTask);
 
 module.exports = taskRouter;

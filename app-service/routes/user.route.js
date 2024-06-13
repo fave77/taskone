@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const userRouter = Router();
+const ROUTES = require('../constants/route.constant');
 const { accessUser, deleteUser } = require('../handlers/user.handler');
 
 /**
@@ -11,14 +12,14 @@ const { accessUser, deleteUser } = require('../handlers/user.handler');
  *       properties:
  *         userId:
  *           type: string
- *           example: 'johndoe'
+ *           example: 'johndoe713612'
  *
  *     UserResp:
  *       type: object
  *       properties:
  *         userId:
  *           type: string
- *           example: 'johndoe'
+ *           example: 'johndoe713612'
  */
 
 
@@ -47,7 +48,7 @@ const { accessUser, deleteUser } = require('../handlers/user.handler');
  *                 data:
  *                   $ref: '#/components/schemas/UserResp'
  */
-userRouter.post('/access-user', accessUser);
+userRouter.post(ROUTES.ACCESS_USER, accessUser);
 
 /**
  * @swagger
@@ -72,6 +73,6 @@ userRouter.post('/access-user', accessUser);
  *                   type: boolean
  *                   example: true
  */
-userRouter.post('/delete-user', deleteUser);
+userRouter.post(ROUTES.DELETE_USER, deleteUser);
 
 module.exports = userRouter;
