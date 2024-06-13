@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app-service:
+    build: ./app-service
+    restart: on-failure
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    depends_on:
+      - db-service
+      - cache-service
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - CACHE_URL=${CACHE_URL}
+      - APP_PORT=${APP_PORT}
+
+  cache-service:
+    image: redis:7.2.5
+    restart: on-failure
+    ports:
+      - "${CACHE_PORT}:${CACHE_PORT}"
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
+
+  db-service:
+    image: mongo:7.0
+    restart: on-failure
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    volumes:
+      - db-data:/data/db
+
+volumes:
+  db-data:
