@@ -12,7 +12,7 @@ const createTask = async (req, res) => {
   logger.info(`[createTask] called with ---> ${JSON.stringify(req.body)}`);
   const taskId = uuidv4();
   const taskInfo = { ...req.body, taskId };
-  if ('recurrence' in taskInfo) {
+  if (taskInfo.recurrence !== '') {
     await scheduleTask(req.scheduler, taskInfo);
   } else {
     await createOrUpdateTaskInDB(taskInfo);
@@ -28,7 +28,7 @@ const updateTask = async (req, res) => {
   logger.info(`[updateTask] called with ---> ${JSON.stringify(req.body)}`);
   const taskInfo = { ...req.body };
 
-  if ('recurrence' in taskInfo) {
+  if (taskInfo.recurrence !== '') {
     await scheduleTask(req.scheduler, taskInfo);
   } else {
     await createOrUpdateTaskInDB(taskInfo);
@@ -46,7 +46,7 @@ const deleteTask = async (req, res) => {
   const { userId, taskId } = req.body;
 
   const result = await deleteTaskInDB(userId, taskId);
-  if (result && 'recurrence' in result) {
+  if (result && result.recurrence !== '') {
     unscheduleTask(req.scheduler, result);
   }
   res.json({

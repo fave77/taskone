@@ -10,10 +10,12 @@ services:
       - db-service
       - cache-service
     environment:
+      - APP_PORT=${APP_PORT}
       - APP_DATABASE_URL=${APP_DATABASE_URL}
       - SCHEDULER_DATABASE_URL=${SCHEDULER_DATABASE_URL}
       - CACHE_URL=${CACHE_URL}
-      - APP_PORT=${APP_PORT}
+      - PUBLIC_VAPID_KEY=${PUBLIC_VAPID_KEY}
+      - PRIVATE_VAPID_KEY=${PRIVATE_VAPID_KEY}
 
   cache-service:
     image: redis:7.2.5
@@ -38,7 +40,9 @@ services:
     depends_on:
       - app-service
     environment:
-      - API_URL=http://app-service:${APP_PORT}
+      - REACT_APP_API_URL=http://app-service:${APP_PORT}
+      - REACT_APP_PUBLIC_URL=http://localhost:${UI_PORT}
+      - REACT_APP_PUBLIC_VAPID_KEY=${PUBLIC_VAPID_KEY}
 
 volumes:
   db-data:

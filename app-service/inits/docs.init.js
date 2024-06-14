@@ -5,7 +5,7 @@ const swaggerDefinition = {
   info: {
     title: 'Taskone Api Specs',
     version: '1.0.0',
-    description: 'These APIs are responsible for handling all the user journey.',
+    description: 'These APIs are responsible for handling user journey.',
   },
 };
 

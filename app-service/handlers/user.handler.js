@@ -1,5 +1,9 @@
 const logger = require('../utils/logger.util.js');
-const {  createOrUpdateUserInDB, deleteUserInDB,  } = require('../utils/db.util.js');
+const {  
+  createOrUpdateUserInDB, 
+  deleteUserInDB, 
+  deleteAllTaskInDB 
+} = require('../utils/db.util.js');
 
 const accessUser = async (req, res) => {
   logger.info(`[accessUser] called with ---> ${JSON.stringify(req.body)}`);
@@ -24,9 +28,10 @@ const deleteUser = async (req, res) => {
 
   await req.cache.del(userId);
   const success = await deleteUserInDB(userId);
+  const result = await deleteAllTaskInDB(userId)
 
   res.json({
-    success,
+    success: success && (result ? true : false),
   });
 };
 

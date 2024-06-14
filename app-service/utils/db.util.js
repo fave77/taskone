@@ -41,7 +41,6 @@ const deleteUserInDB = async (userId) => {
  */
 const createOrUpdateTaskInDB = async (taskInfo) => {
   // Find the task by userId, taskId and update or create if not exists
-  console.log(taskInfo, 'ito');
   const result = await Task.findOneAndUpdate(
     { userId: taskInfo.userId, taskId: taskInfo.taskId },
     { ...taskInfo },
@@ -71,6 +70,21 @@ const deleteTaskInDB = async (userId, taskId) => {
 };
 
 /**
+ * deleteAllTaskInDB - This function deletes all tasks for an user
+ * @param {string} userId
+ * @returns {Promise<object>}
+ */
+const deleteAllTaskInDB = async (userId) => {
+  const result = await Task.deleteMany({ userId });
+  if (result) {
+    logger.debug(`All Tasks deleted successfully for user ---> ${userId}`);
+  } else {
+    logger.debug(`'No task found for user ---> ${userId}`);
+  }
+  return result;
+};
+
+/**
  * listTaskInDB - This function lists all the tasks for an user
  * @param {string} userId
  * @returns {Promise<object>}
@@ -85,4 +99,11 @@ const listTaskInDB = async (userId) => {
   return result;
 };
 
-module.exports = { createOrUpdateUserInDB, deleteUserInDB, createOrUpdateTaskInDB, deleteTaskInDB, listTaskInDB };
+module.exports = { 
+  createOrUpdateUserInDB, 
+  deleteUserInDB, 
+  createOrUpdateTaskInDB, 
+  deleteTaskInDB, 
+  deleteAllTaskInDB,
+  listTaskInDB 
+};
