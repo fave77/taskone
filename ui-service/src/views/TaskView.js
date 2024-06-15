@@ -11,6 +11,7 @@ import taskService from '../services/taskService';
 import TaskCard from '../components/Task';
 
 import logger from '../utils/loggerUtil';
+import { TASK_PRIORITY, TASK_STATUS } from '../utils/constantUtil';
 
 
 const TaskColumn = ({ title, tasks, user, fetchTasks }) => (
@@ -58,22 +59,20 @@ const TaskColumn = ({ title, tasks, user, fetchTasks }) => (
 );
 
 const priorityOrder = {
-  'LOW': 2,
-  'MEDIUM': 1,
-  'HIGH': 0
+  [TASK_PRIORITY.LOW]: 2,
+  [TASK_PRIORITY.MEDIUM]: 1,
+  [TASK_PRIORITY.HIGH]: 0
 };
 
-const sortByPriority = (tasks) => {
-  const x = tasks.sort((task1, task2) => priorityOrder[task1.priority] - priorityOrder[task2.priority]);
-  console.log(x);
-  return x
-};
+const sortByPriority = (tasks) => (
+  tasks.sort((task1, task2) => priorityOrder[task1.priority] - priorityOrder[task2.priority])
+);
 
 const TaskBoard = ({ tasks, user, fetchTasks }) => {
 
-  const incompleteTasks = sortByPriority(tasks.filter(task => task.status === 'INCOMPLETE'));
-  const completeTasks = sortByPriority(tasks.filter(task => task.status === 'COMPLETE'));
-  const cancelledTasks = sortByPriority(tasks.filter(task => task.status === 'CANCELLED'));
+  const incompleteTasks = sortByPriority(tasks.filter(task => task.status === TASK_STATUS.INCOMPLETE));
+  const completeTasks = sortByPriority(tasks.filter(task => task.status === TASK_STATUS.COMPLETE));
+  const cancelledTasks = sortByPriority(tasks.filter(task => task.status === TASK_STATUS.CANCELLED));
 
   return (
     <Grid container spacing={2}>

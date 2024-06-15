@@ -70,21 +70,6 @@ const deleteTaskInDB = async (userId, taskId) => {
 };
 
 /**
- * deleteAllTaskInDB - This function deletes all tasks for an user
- * @param {string} userId
- * @returns {Promise<object>}
- */
-const deleteAllTaskInDB = async (userId) => {
-  const result = await Task.deleteMany({ userId });
-  if (result) {
-    logger.debug(`All Tasks deleted successfully for user ---> ${userId}`);
-  } else {
-    logger.debug(`'No task found for user ---> ${userId}`);
-  }
-  return result;
-};
-
-/**
  * listTaskInDB - This function lists all the tasks for an user
  * @param {string} userId
  * @returns {Promise<object>}
@@ -97,6 +82,22 @@ const listTaskInDB = async (userId) => {
     logger.debug(`User '${userId}' not found, nothing to fetch`);
   }
   return result;
+};
+
+/**
+ * deleteAllTaskInDB - This function deletes all tasks for an user
+ * @param {string} userId
+ * @returns {Promise<object>}
+ */
+const deleteAllTaskInDB = async (userId, scheduler) => {
+  const result = await Task.deleteMany({ userId });
+  if (result) {
+    logger.debug(`All Tasks deleted successfully for user ---> ${userId}`);
+  } else {
+    logger.debug(`'No task found for user ---> ${userId}`);
+  }
+  const tasks = await listTaskInDB(userId);
+  return { result, tasks };
 };
 
 module.exports = { 

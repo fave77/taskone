@@ -9,12 +9,10 @@ const convertIstToUtc = (date) => {
 }
 
 const generateCronPattern = (date, frequency, dayOfWeek) => {
-  console.log(date.minute());
   const minutes = date.minute();
   const hours = date.hour();
   const weekDay = date.day();
   const monthDay = date.date();
-  const month = date.month() + 1;
   
   switch (frequency) {
     case 'daily':
@@ -26,7 +24,7 @@ const generateCronPattern = (date, frequency, dayOfWeek) => {
     case 'specific-day':
       return `${minutes} ${hours} * * ${dayOfWeek}`;
     default:
-      return `${minutes} ${hours} ${monthDay} ${month} *`;
+      return `${minutes} ${hours} * * *`;
   }
 };
 

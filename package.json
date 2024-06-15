@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A todo webapp for creating and modifying tasks! 📝",
   "scripts": {
-    "build": "docker-compose up --build"
+    "build": "docker-compose up --build --remove-orphans"
   },
   "repository": {
     "type": "git",

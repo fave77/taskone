@@ -1,39 +1,45 @@
 import logger from './utils/loggerUtil';
 
-export const register = () => {
+export const register = (username) => {
   if ('serviceWorker' in navigator) {  
-    run().catch(error => logger.error(error));
+    logger.info('Service worker registering...');
+    navigator.serviceWorker
+      .register('/worker.js', { scope: '/public' })
+      .then(async registration => {
+        logger.info('Service worker registered!');
+        logger.info('Notification subscribing...');
+        await delay(1000);
+        const subscription = await registration.pushManager
+        .subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: process.env.REACT_APP_PUBLIC_VAPID_KEY
+        });
+
+        console.log(subscription)
+      
+        await fetch(process.env.REACT_APP_API_URL + '/subscribe', {
+          method: 'POST',
+          body: JSON.stringify({ userId: username, subscription}),
+          headers: {
+            'content-type': 'application/json'
+          }
+        });
+        logger.info('Notification subscribed!');
+      })
+      .catch(error => logger.error(error));
   }
 };
 
-const run = async () => {
-  logger.info('Registering service worker');
-  const registration = await navigator.serviceWorker.register('/worker.js', { scope: '/public' });
-  logger.info('Registered service worker');
-
-  const subscription = await registration.pushManager
-    .subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: process.env.REACT_APP_PUBLIC_VAPID_KEY
-    });
-  logger.info('Registering push notification');
-
-  await fetch(process.env.REACT_APP_API_URL + '/subscribe', {
-    method: 'POST',
-    body: JSON.stringify(subscription),
-    headers: {
-      'content-type': 'application/json'
-    }
-  });
-  logger.info('Registered push notification');
-}
-
-   
+const delay = (ms) => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}; 
 
 export const unregister = () => {
+  console.log('wdw', 'serviceWorker' in navigator)
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready
+    navigator.serviceWorker.getRegistration('/public')
       .then(registration => {
+        logger.info('Service worker unregistered');
         registration.unregister();
       })
       .catch(error => {

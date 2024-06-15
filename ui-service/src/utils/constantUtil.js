@@ -1,0 +1,11 @@
+export const TASK_PRIORITY = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+};
+
+export const TASK_STATUS = {
+  COMPLETE: 'COMPLETE',
+  INCOMPLETE: 'INCOMPLETE',
+  CANCELLED: 'CANCELLED',
+};

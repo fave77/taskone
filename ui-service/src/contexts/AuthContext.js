@@ -1,5 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import userService from '../services/userService';
+import * as serviceWorkerRegistration from '../serviceWorkerRegistration'; // Import the service worker registration
+
 
 import logger from '../utils/loggerUtil';
 
@@ -27,6 +29,8 @@ export const AuthProvider = ({ children }) => {
       const loggedInUser = response.data?.data?.userId;
       setUser(loggedInUser);
       localStorage.setItem('username', JSON.stringify(loggedInUser));
+      // Register the service worker
+      serviceWorkerRegistration.register(username);
     } catch (error) {
       logger.error('Login failed', error);
       throw error;
@@ -36,6 +40,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     setUser(null);
     localStorage.removeItem('username');
+    serviceWorkerRegistration.unregister();
   };
 
   const unregister = async (username) => {
@@ -43,6 +48,7 @@ export const AuthProvider = ({ children }) => {
       await userService.deleteProfile(username);
       setUser(null);
       localStorage.removeItem('username');
+    serviceWorkerRegistration.unregister();
     } catch (error) {
       logger.error('Unregister failed', error);
       throw error;

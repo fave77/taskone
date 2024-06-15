@@ -1,4 +1,7 @@
 const logger = require('../utils/logger.util.js');
+const { unscheduleReminder } = require('../schedulers/reminder.scheduler.js');
+const { unscheduleTask } = require('../schedulers/task.scheduler.js');
+
 const {  
   createOrUpdateUserInDB, 
   deleteUserInDB, 
@@ -28,7 +31,12 @@ const deleteUser = async (req, res) => {
 
   await req.cache.del(userId);
   const success = await deleteUserInDB(userId);
-  const result = await deleteAllTaskInDB(userId)
+  const { result, tasks } = await deleteAllTaskInDB(userId, req.scheduler);
+  
+  for (const task in tasks) {
+    unscheduleReminder(scheduler, task);
+    unscheduleTask(scheduler, task);
+  }
 
   res.json({
     success: success && (result ? true : false),

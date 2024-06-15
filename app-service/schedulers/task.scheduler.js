@@ -6,20 +6,24 @@ const { createOrUpdateTaskInDB } = require('../utils/db.util.js');
 const scheduleTask = async (scheduler, data) => {
   logger.info(`Scheduling recurring task for taskId ${data.taskId} on ---> ${data.recurrence}`);
   const jobName = `rec_${data.taskId}`;
-  scheduler.define(jobName, async (job) => {
+  scheduler.define(jobName, async function(job) {
     logger.info(`Processing job ---> ${job.attrs.name}`);
     const taskId = uuidv4();
-    const taskInfo = { ...job.attrs.data, recurrence: '', taskId };
+    const taskInfo = { ...job.attrs.data, recurrence: '', reminder: '', taskId };
 
+    console.log(createOrUpdateTaskInDB, typeof createOrUpdateTaskInDB);
     await createOrUpdateTaskInDB(taskInfo);
   });
+
+  console.log(createOrUpdateTaskInDB, typeof createOrUpdateTaskInDB);
+
 
   scheduler.every(data.recurrence, jobName, data);
 };
 
 const unscheduleTask = async (scheduler, data) => {
-  logger.info(`Unscheduling recurring task for taskId ${data.taskId}`);
-  const jobName = `rec_${data.taskId}`;
+  logger.info(`Unscheduling recurring task for taskId ${data?.taskId}`);
+  const jobName = `rec_${data?.taskId}`;
   await scheduler.cancel({ name: jobName });
 };
 

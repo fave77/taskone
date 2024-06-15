@@ -14,6 +14,8 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import Button from '@mui/material/Button';
 import dayjs from 'dayjs';
 
+import { TASK_PRIORITY, TASK_STATUS } from '../utils/constantUtil';
+
 import cronModule from '../utils/cronUtil';
 
 import taskService from '../services/taskService';
@@ -21,7 +23,6 @@ import logger from '../utils/loggerUtil';
 
 
 export default function TaskForm({ taskData, user, fetchTasks, handleClose, action }) {
-  console.log(taskData)
   const [title, setTitle] = React.useState(taskData.title ?? '');
   const [description, setDescription] = React.useState(taskData.description ?? '');
   const [dueDate, setDueDate] = React.useState(
@@ -34,7 +35,7 @@ export default function TaskForm({ taskData, user, fetchTasks, handleClose, acti
   const [reminderEnable, setReminderEnable] = React.useState((taskData.reminder && taskData.reminder !== '') ? true : false);
   const [reminder, setReminder] = React.useState(
     (taskData.reminder && taskData.reminder !== '')
-      ? dayjs(taskData.reminder)
+      ? cronModule.convertUtcToIst(dayjs(cronModule.convertCronToDateTime(taskData.reminder)))
       : dayjs()
   );
   const [recurrenceEnable, setRecurrenceEnable] = React.useState((taskData.recurrence && taskData.recurrence !== '') ? true : false);
@@ -47,9 +48,8 @@ export default function TaskForm({ taskData, user, fetchTasks, handleClose, acti
   const [frequency, setFrequency] = React.useState('daily');
   const [dayOfWeek, setDayOfWeek] = React.useState('0');
 
-  const cancelledTask = taskData && taskData.status === 'CANCELLED';
-
-  
+  const completedTask = taskData && taskData.status === TASK_STATUS.COMPLETE;
+  const cancelledTask = taskData && taskData.status === TASK_STATUS.CANCELLED;
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -71,8 +71,8 @@ export default function TaskForm({ taskData, user, fetchTasks, handleClose, acti
     setStatus(event.target.value);
   };
 
-  const handleReminderChange = (event) => {
-    setReminder(event.target.value);
+  const handleReminderChange = (value) => {
+    setReminder(value);
   };
 
   const handleRecurrenceChange = (value) => {
@@ -80,7 +80,6 @@ export default function TaskForm({ taskData, user, fetchTasks, handleClose, acti
   };
 
   const handleFrequencyChange = (event) => {
-    console.log(event.target.value)
     setFrequency(event.target.value);
   }
 
@@ -99,10 +98,14 @@ export default function TaskForm({ taskData, user, fetchTasks, handleClose, acti
         priority,
         status,
         reminder: reminderEnable 
-          ? (cancelledTask || status === 'CANCELLED' ? '' : reminder.format('YYYY-MM-DD HH:mm:ss'))
+          ? (cancelledTask 
+            || status === TASK_STATUS.CANCELLED 
+            || completedTask 
+            || status === TASK_STATUS.COMPLETE 
+            ? '' : cronModule.generateCronPattern(cronModule.convertIstToUtc(reminder), null, null))
           : '',
         recurrence: recurrenceEnable 
-          ? (cancelledTask || status === 'CANCELLED' ? '' : cronModule.generateCronPattern(cronModule.convertIstToUtc(recurrence), frequency, dayOfWeek))
+          ? (cancelledTask || status === TASK_STATUS.CANCELLED ? '' : cronModule.generateCronPattern(cronModule.convertIstToUtc(recurrence), frequency, dayOfWeek))
           : ''
       };
       if (action === 'create') {
@@ -176,9 +179,9 @@ export default function TaskForm({ taskData, user, fetchTasks, handleClose, acti
             disabled={cancelledTask}
 
           >
-            <MenuItem value={'LOW'}>LOW</MenuItem>
-            <MenuItem value={'MEDIUM'}>MEDIUM</MenuItem>
-            <MenuItem value={'HIGH'}>HIGH</MenuItem>
+            <MenuItem value={TASK_PRIORITY.LOW}>LOW</MenuItem>
+            <MenuItem value={TASK_PRIORITY.MEDIUM}>MEDIUM</MenuItem>
+            <MenuItem value={TASK_PRIORITY.HIGH}>HIGH</MenuItem>
           </Select>
         </FormControl>
 
@@ -192,9 +195,9 @@ export default function TaskForm({ taskData, user, fetchTasks, handleClose, acti
             value = {status}
             onChange={handleStatusChange}
           >
-            <MenuItem value={'INCOMPLETE'}>INCOMPLETE</MenuItem>
-            <MenuItem value={'COMPLETE'}>COMPLETE</MenuItem>
-            <MenuItem value={'CANCELLED'}>CANCELLED</MenuItem>
+            <MenuItem value={TASK_STATUS.INCOMPLETE}>INCOMPLETE</MenuItem>
+            <MenuItem value={TASK_STATUS.COMPLETE}>COMPLETE</MenuItem>
+            <MenuItem value={TASK_STATUS.CANCELLED}>CANCELLED</MenuItem>
           </Select>
         </FormControl>
 
@@ -208,10 +211,10 @@ export default function TaskForm({ taskData, user, fetchTasks, handleClose, acti
               onChange={() => setReminderEnable(!reminderEnable)}
               name="loading"
               color="primary"
-              disabled={cancelledTask}
+              disabled={cancelledTask || completedTask}
             />
           }
-          label="Enable Reminder for this task"
+          label="Enable Daily Reminder"
         />
 
         {
@@ -219,7 +222,7 @@ export default function TaskForm({ taskData, user, fetchTasks, handleClose, acti
           ? <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={['DateTimePicker']}>
                 <DateTimePicker 
-                  label="Reminder Time" 
+                  label="Reminder Starting" 
                   value={reminder} 
                   onChange={handleReminderChange}
                   disabled={cancelledTask}

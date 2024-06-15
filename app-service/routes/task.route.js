@@ -22,7 +22,7 @@ const { createTask, updateTask, deleteTask, listTask } = require('../handlers/ta
  *         dueDate:
  *           type: string
  *           format: date
- *           example: '2024-06-15'
+ *           example: '2024-06-15T23:16:14.000Z'
  *         priority:
  *           type: string
  *           enum: ['LOW', 'MEDIUM', 'HIGH']
@@ -32,14 +32,8 @@ const { createTask, updateTask, deleteTask, listTask } = require('../handlers/ta
  *           enum: ['INCOMPLETE', 'COMPLETE', 'CANCELLED']
  *           example: 'INCOMPLETE'
  *         reminder:
- *           type: object
- *           properties:
- *             pattern: 
- *               type: string
- *               example: '0 0 * * *'
- *             preference:
- *               type: string
- *               example: 'ALERT'
+ *           type: string
+ *           example: '0 0 * * *'
  *         recurrence:
  *           type: string
  *           example: '0 0 * * *'
@@ -63,7 +57,7 @@ const { createTask, updateTask, deleteTask, listTask } = require('../handlers/ta
  *         dueDate:
  *           type: string
  *           format: date
- *           example: '2024-06-15'
+ *           example: '2024-06-15T23:16:14.000Z'
  *         priority:
  *           type: string
  *           enum: ['LOW', 'MEDIUM', 'HIGH']
@@ -73,14 +67,8 @@ const { createTask, updateTask, deleteTask, listTask } = require('../handlers/ta
  *           enum: ['INCOMPLETE', 'COMPLETE', 'CANCELLED']
  *           example: 'INCOMPLETE'
  *         reminder:
- *           type: object
- *           properties:
- *             pattern: 
- *               type: string
- *               example: '0 0 * * *'
- *             preference:
- *               type: string
- *               example: 'ALERT'
+ *           type: string
+ *           example: '0 0 * * *'
  *         recurrence:
  *           type: string
  *           example: '0 0 * * *'
@@ -89,6 +77,12 @@ const { createTask, updateTask, deleteTask, listTask } = require('../handlers/ta
  *     TaskResp:
  *       type: object
  *       properties:
+ *         _id:
+ *           type: string
+ *           example: '666ddbed1728896abc0a3f04'
+ *         __v:
+ *           type: integer
+ *           example: 0
  *         taskId:
  *           type: string
  *           format: uuid
@@ -102,10 +96,18 @@ const { createTask, updateTask, deleteTask, listTask } = require('../handlers/ta
  *         description:
  *           type: string
  *           example: 'dolor sit amet, consectetur adipiscing elit'
+ *         createdAt:
+ *           type: string
+ *           format: date
+ *           example: '2024-06-15T23:16:14.000Z'
+ *         updatedAt:
+ *           type: string
+ *           format: date
+ *           example: '2024-06-15T23:16:14.000Z'
  *         dueDate:
  *           type: string
  *           format: date
- *           example: '2024-06-15'
+ *           example: '2024-06-15T23:16:14.000Z'
  *         priority:
  *           type: string
  *           enum: ['LOW', 'MEDIUM', 'HIGH']
@@ -115,14 +117,8 @@ const { createTask, updateTask, deleteTask, listTask } = require('../handlers/ta
  *           enum: ['INCOMPLETE', 'COMPLETE', 'CANCELLED']
  *           example: 'INCOMPLETE'
  *         reminder:
- *           type: object
- *           properties:
- *             pattern: 
- *               type: string
- *               example: '0 0 * * *'
- *             preference:
- *               type: string
- *               example: 'ALERT'
+ *           type: string
+ *           example: '0 0 * * *'
  *         recurrence:
  *           type: string
  *           example: '0 0 * * *'

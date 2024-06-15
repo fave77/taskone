@@ -27,3 +27,6 @@ Thumbs.db
 *.zip
 *.tgz
 *.tar.gz
+
+# Local folder
+local/

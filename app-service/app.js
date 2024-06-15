@@ -8,9 +8,6 @@ const redisClient = require('./inits/cache.init');
 require('./inits/db.init');
 const swaggerSpec = require('./inits/docs.init');
 const scheduler = require('./inits/scheduler.init');
-const webpush = require('./inits/webpush.init');
-
-const logger = require('./utils/logger.util')
 
 const app = express();
 
@@ -23,7 +20,6 @@ app.use(express.urlencoded({extended: true}));
 app.use((req, res, next) => {
   req.cache = redisClient;
   req.scheduler = scheduler;
-  req.webpush = webpush;
   next();
 });
 app.use('/api-docs', swagger.serve, swagger.setup(swaggerSpec));
@@ -34,17 +30,12 @@ app.get('/', (req, res) => {
 });
 
 // Endpoint for subscribing to notification
-app.post('/subscribe', (req, res) => {
-  const subscription = req.body;
+app.post('/subscribe', async (req, res) => {
+  const { userId, subscription } = req.body;
+  console.log('dw')
+  await req.cache.set(userId, JSON.stringify(subscription));
+  console.log('wd')
   res.status(201).json({});
-  const payload = JSON.stringify({ title: 'test' });
-
-  setTimeout(() => {
-    webpush.sendNotification(subscription, payload).catch(error => {
-      logger.error(error);
-    });
-  }, 10000);
-
 });
 
 // Defined Routes

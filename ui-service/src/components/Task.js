@@ -9,7 +9,7 @@ import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { red, green, blue, blueGrey } from '@mui/material/colors';
+import { red, green, blueGrey } from '@mui/material/colors';
 import RepeatIcon from '@mui/icons-material/Repeat';
 import RepeatOnIcon from '@mui/icons-material/RepeatOn';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -17,6 +17,7 @@ import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Tooltip from '@mui/material/Tooltip';
 
+import { TASK_PRIORITY, TASK_STATUS } from '../utils/constantUtil';
 
 import UpdateTask from './UpdateTask';
 import DeleteTask from './DeleteTask';
@@ -33,17 +34,17 @@ const ExpandMore = styled((props) => {
 }));
 
 const cardTheme = (status) => {
-  if (status === 'INCOMPLETE')
+  if (status === TASK_STATUS.INCOMPLETE)
     return { bgcolor: red[200] };
-  else if (status === 'COMPLETE')
+  else if (status === TASK_STATUS.COMPLETE)
     return { bgcolor: green[200] };
   return { bgcolor: blueGrey[200] };
 };
 
 const priorityTheme = (priority) => {
-  if (priority === 'LOW')
+  if (priority === TASK_PRIORITY.LOW)
     return { color: 'info.main' };
-  else if (priority === 'MEDIUM')
+  else if (priority === TASK_PRIORITY.MEDIUM)
     return { color: 'warning.main' };
   return { color: 'error.main' };
 };
@@ -92,7 +93,7 @@ export default function TaskCard({
       <CardMedia
         component="img"
         height="100"
-        image={`${process.env.PUBLIC_URL}/static/images/placeholder${hashStringToNumber(title)}.jpg`}
+        image={`${process.env.REACT_APP_PUBLIC_URL}/static/images/placeholder${hashStringToNumber(title)}.jpg`}
         alt="task image"
       />
       <CardContent>
