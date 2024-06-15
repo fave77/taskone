@@ -9,7 +9,6 @@ const scheduleReminder = async (scheduler, subscription, data) => {
     logger.info(`Processing job ---> ${job.attrs.name}`);
     const { subscription, taskInfo } = job.attrs.data;
     const payload = JSON.stringify({ ...taskInfo });
-    console.log(webpush.getInstance())
     await webpush.getInstance().sendNotification(subscription, payload);
   });
 

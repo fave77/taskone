@@ -93,7 +93,7 @@ export default function TaskCard({
       <CardMedia
         component="img"
         height="100"
-        image={`${process.env.REACT_APP_PUBLIC_URL}/static/images/placeholder${hashStringToNumber(title)}.jpg`}
+        image={`/static/images/placeholder${hashStringToNumber(title)}.jpg`}
         alt="task image"
       />
       <CardContent>

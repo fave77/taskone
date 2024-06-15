@@ -246,7 +246,7 @@ export default function TaskForm({ taskData, user, fetchTasks, handleClose, acti
               disabled={cancelledTask}
             />
           }
-          label="Enable Recurring tasks"
+          label="Enable Recurring Tasks"
         />
 
         {

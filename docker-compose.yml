@@ -1,6 +1,18 @@
 version: '3.8'
 
 services:
+  nginx-proxy:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - app-service
+      - ui-service
+    networks:
+      - app-network
+
   app-service:
     build: ./app-service
     restart: on-failure
@@ -16,13 +28,17 @@ services:
       - CACHE_URL=${CACHE_URL}
       - PUBLIC_VAPID_KEY=${PUBLIC_VAPID_KEY}
       - PRIVATE_VAPID_KEY=${PRIVATE_VAPID_KEY}
+    networks:
+      - app-network
 
   cache-service:
     image: redis:7.2.5
     restart: on-failure
     ports:
       - "${CACHE_PORT}:${CACHE_PORT}"
-    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
+    command: ["redis-server", "--requirepass", "${CACHE_PASSWORD}"]
+    networks:
+      - app-network
 
   db-service:
     image: mongo:7.0
@@ -31,18 +47,24 @@ services:
       - "${DB_PORT}:${DB_PORT}"
     volumes:
       - db-data:/data/db
+    networks:
+      - app-network
 
   ui-service:
-    build: ./ui-service
+    build: 
+      context: ./ui-service
+      args:
+        REACT_APP_PUBLIC_VAPID_KEY: ${PUBLIC_VAPID_KEY}
     restart: on-failure
     ports:
       - "${UI_PORT}:80"
     depends_on:
       - app-service
-    environment:
-      - REACT_APP_API_URL=${REACT_APP_API_URL}
-      - REACT_APP_PUBLIC_URL=${REACT_APP_PUBLIC_URL}
-      - REACT_APP_PUBLIC_VAPID_KEY=${PUBLIC_VAPID_KEY}
+    networks:
+      - app-network
 
 volumes:
   db-data:
+
+networks:
+  app-network:

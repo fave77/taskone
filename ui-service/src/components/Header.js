@@ -76,7 +76,7 @@ function ResponsiveAppBar({ user, fetchTasks }) {
                   fetchTasks={fetchTasks} 
                 />
 
-                <Link href={`${process.env.REACT_APP_API_URL}/api-docs`} target="_blank" rel="noopener noreferrer">
+                <Link href={`/api-docs`} target="_blank" rel="noopener noreferrer">
                   <Tooltip title='Check API Docs'>
                     <IconButton aria-label="create">
                       <LibraryBooksIcon fontSize="large"/>

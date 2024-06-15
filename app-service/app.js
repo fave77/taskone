@@ -25,16 +25,14 @@ app.use((req, res, next) => {
 app.use('/api-docs', swagger.serve, swagger.setup(swaggerSpec));
 
 // Endpoint for health check
-app.get('/', (req, res) => {
+app.get('/ping', (req, res) => {
   res.send('The App Server is up!');
 });
 
 // Endpoint for subscribing to notification
 app.post('/subscribe', async (req, res) => {
   const { userId, subscription } = req.body;
-  console.log('dw')
   await req.cache.set(userId, JSON.stringify(subscription));
-  console.log('wd')
   res.status(201).json({});
 });
 

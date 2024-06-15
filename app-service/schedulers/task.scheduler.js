@@ -11,12 +11,8 @@ const scheduleTask = async (scheduler, data) => {
     const taskId = uuidv4();
     const taskInfo = { ...job.attrs.data, recurrence: '', reminder: '', taskId };
 
-    console.log(createOrUpdateTaskInDB, typeof createOrUpdateTaskInDB);
     await createOrUpdateTaskInDB(taskInfo);
   });
-
-  console.log(createOrUpdateTaskInDB, typeof createOrUpdateTaskInDB);
-
 
   scheduler.every(data.recurrence, jobName, data);
 };

@@ -15,9 +15,7 @@ export const register = (username) => {
           applicationServerKey: process.env.REACT_APP_PUBLIC_VAPID_KEY
         });
 
-        console.log(subscription)
-      
-        await fetch(process.env.REACT_APP_API_URL + '/subscribe', {
+        await fetch('/subscribe', {
           method: 'POST',
           body: JSON.stringify({ userId: username, subscription}),
           headers: {
@@ -35,7 +33,6 @@ const delay = (ms) => {
 }; 
 
 export const unregister = () => {
-  console.log('wdw', 'serviceWorker' in navigator)
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistration('/public')
       .then(registration => {

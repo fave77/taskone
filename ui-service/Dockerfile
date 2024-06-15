@@ -14,6 +14,12 @@ RUN npm install
 # Copy the rest of the application code to the working directory
 COPY . .
 
+# Build-time arguments for environment variables
+ARG REACT_APP_PUBLIC_VAPID_KEY
+
+# Set environment variables for the build
+ENV REACT_APP_PUBLIC_VAPID_KEY=${REACT_APP_PUBLIC_VAPID_KEY}
+
 # Build the React application
 RUN npm run build
 

@@ -4,7 +4,7 @@
 self.addEventListener('push', ev => {
   const data = ev.data.json();
 
-  console.log(data)
+  console.log(`Notification received for Task ---> ${data.title}`);
 
   ev.waitUntil(
     self.registration.showNotification(data.title, {
