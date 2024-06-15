@@ -7,6 +7,11 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'These APIs are responsible for handling user journey.',
   },
+  servers: [
+    {
+      url: process.env.API_URL,
+    },
+  ],
 };
 
 const options = {

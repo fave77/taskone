@@ -40,8 +40,8 @@ services:
     depends_on:
       - app-service
     environment:
-      - REACT_APP_API_URL=http://app-service:${APP_PORT}
-      - REACT_APP_PUBLIC_URL=http://localhost:${UI_PORT}
+      - REACT_APP_API_URL=${REACT_APP_API_URL}
+      - REACT_APP_PUBLIC_URL=${REACT_APP_PUBLIC_URL}
       - REACT_APP_PUBLIC_VAPID_KEY=${PUBLIC_VAPID_KEY}
 
 volumes:
