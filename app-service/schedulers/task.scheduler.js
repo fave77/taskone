@@ -9,7 +9,7 @@ const scheduleTask = async (scheduler, data) => {
   scheduler.define(jobName, async (job) => {
     logger.info(`Processing job ---> ${job.attrs.name}`);
     const taskId = uuidv4();
-    const taskInfo = { ...job.attrs.data, recurrence: undefined, taskId };
+    const taskInfo = { ...job.attrs.data, recurrence: '', taskId };
 
     await createOrUpdateTaskInDB(taskInfo);
   });

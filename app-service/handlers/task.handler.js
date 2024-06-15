@@ -12,15 +12,14 @@ const createTask = async (req, res) => {
   logger.info(`[createTask] called with ---> ${JSON.stringify(req.body)}`);
   const taskId = uuidv4();
   const taskInfo = { ...req.body, taskId };
+  const result = await createOrUpdateTaskInDB(taskInfo);
   if (taskInfo.recurrence !== '') {
     await scheduleTask(req.scheduler, taskInfo);
-  } else {
-    await createOrUpdateTaskInDB(taskInfo);
   }
 
   res.json({
     success: true,
-    data: taskInfo
+    data: result
   });
 }
 
@@ -28,16 +27,16 @@ const updateTask = async (req, res) => {
   logger.info(`[updateTask] called with ---> ${JSON.stringify(req.body)}`);
   const taskInfo = { ...req.body };
 
+  const result = await createOrUpdateTaskInDB(taskInfo);
   if (taskInfo.recurrence !== '') {
     await scheduleTask(req.scheduler, taskInfo);
   } else {
-    await createOrUpdateTaskInDB(taskInfo);
     await unscheduleTask(req.scheduler, taskInfo);
   }
 
   res.json({
     success: true,
-    data: taskInfo
+    data: result
   });
 }
 

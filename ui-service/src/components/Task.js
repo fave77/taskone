@@ -9,7 +9,7 @@ import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { green, blue } from '@mui/material/colors';
+import { red, green, blue, blueGrey } from '@mui/material/colors';
 import RepeatIcon from '@mui/icons-material/Repeat';
 import RepeatOnIcon from '@mui/icons-material/RepeatOn';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -31,6 +31,22 @@ const ExpandMore = styled((props) => {
     duration: theme.transitions.duration.shortest,
   }),
 }));
+
+const cardTheme = (status) => {
+  if (status === 'INCOMPLETE')
+    return { bgcolor: red[200] };
+  else if (status === 'COMPLETE')
+    return { bgcolor: green[200] };
+  return { bgcolor: blueGrey[200] };
+};
+
+const priorityTheme = (priority) => {
+  if (priority === 'LOW')
+    return { color: 'info.main' };
+  else if (priority === 'MEDIUM')
+    return { color: 'warning.main' };
+  return { color: 'error.main' };
+};
 
 export default function TaskCard({
   taskId,
@@ -62,12 +78,16 @@ export default function TaskCard({
     <Card sx={{ maxWidth: 345, marginTop: 2, marginBottom: 3, boxShadow: 3 }} >
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: blue[200] }} aria-label="task-icon">
+          <Avatar sx={{ bgcolor: blueGrey[500], fontWeight: 'bold' }} aria-label="task-icon">
             {user[0]}
           </Avatar>
         }
+        sx ={{...cardTheme(status), '& .MuiCardHeader-title': { color: 'black', fontWeight: 'bold', fontSize: '1.2em' }}}
         title={title}
-        subheader={`Due date: ${dueDate}`}
+        subheader={`Due date: ${new Date(dueDate).toDateString()}`}
+        subheaderTypographyProps={{
+          sx: { color: 'black', fontWeight: 'bold' } // Change 'red' to any color you like
+        }}
       />
       <CardMedia
         component="img"
@@ -76,7 +96,7 @@ export default function TaskCard({
         alt="task image"
       />
       <CardContent>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={priorityTheme(priority)}>
           {`Priority: ${priority}`}
         </Typography>
         <Typography variant="body2" color="text.secondary">

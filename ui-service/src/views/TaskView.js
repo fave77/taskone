@@ -57,11 +57,23 @@ const TaskColumn = ({ title, tasks, user, fetchTasks }) => (
   </Grid>
 );
 
+const priorityOrder = {
+  'LOW': 2,
+  'MEDIUM': 1,
+  'HIGH': 0
+};
+
+const sortByPriority = (tasks) => {
+  const x = tasks.sort((task1, task2) => priorityOrder[task1.priority] - priorityOrder[task2.priority]);
+  console.log(x);
+  return x
+};
+
 const TaskBoard = ({ tasks, user, fetchTasks }) => {
 
-  const incompleteTasks = tasks.filter(task => task.status === 'INCOMPLETE');
-  const completeTasks = tasks.filter(task => task.status === 'COMPLETE');
-  const cancelledTasks = tasks.filter(task => task.status === 'CANCELLED');
+  const incompleteTasks = sortByPriority(tasks.filter(task => task.status === 'INCOMPLETE'));
+  const completeTasks = sortByPriority(tasks.filter(task => task.status === 'COMPLETE'));
+  const cancelledTasks = sortByPriority(tasks.filter(task => task.status === 'CANCELLED'));
 
   return (
     <Grid container spacing={2}>

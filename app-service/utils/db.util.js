@@ -90,7 +90,7 @@ const deleteAllTaskInDB = async (userId) => {
  * @returns {Promise<object>}
  */
 const listTaskInDB = async (userId) => {
-  const result = await Task.find({ userId });
+  const result = await Task.find({ userId }).sort({ createdAt: -1 });
   if (result) {
     logger.debug(`All Tasks fetched successfully for '${userId}'`);
   } else {

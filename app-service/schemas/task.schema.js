@@ -16,7 +16,7 @@ const taskSchema = new Schema({
     preference: { type: String, enum: TASK_NOTIFICATION_PREFERANCES }
   },
   recurrence: { type: String }
-});
+}, { timestamps: true });
 
 // Create a compound index on userId and taskId
 taskSchema.index({ userId: 1, taskId: 1 });
