@@ -10,7 +10,7 @@ const swaggerDefinition = {
   servers: [
     {
       url: process.env.BASE_URL,
-      description: 'EC2 Public DNS server'
+      description: 'Application base url'
     }
   ]
 };

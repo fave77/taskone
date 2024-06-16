@@ -41,20 +41,37 @@ APP_PORT=8080
 UI_PORT=3000
 PUBLIC_VAPID_KEY=<provide-your-own-public-key>
 PRIVATE_VAPID_KEY=<provide-your-own-private-key>
+BASE_URL=<provide-your-base-url-e.g.-http://localhost>
 ```
 
 2. In order to set `PUBLIC_VAPID_KEY` and `PRIVATE_VAPID_KEY`, you need to generate your own VAPID key pairs:
 ```bash
-# Install web-push libary
+# 1. Install web-push libary
 npm i web-push -g
 
-# Generate key pairs
+# 2. Generate key pairs
+# Either run
 web-push generate-vapid-key
+
+# Or if you have npx installed
+npx web-push generate-vapid-key
 ```
 
-3. The project can be setup and executed with just the following command:
+3. The project can be executed with just one command:
 ```bash
+# Run the project
+
+# Either
 npm run build
+
+# Or
+docker-compose up --build --remove-orphans
+
+# Or
+docker-compose up --build
+
+# Or
+docker compose up --build
 ```
 
 #### Components
@@ -80,6 +97,17 @@ If you have made it this far without any issues, just head over to your browser,
 - `POST localhost/subscribe` -> app-service (push notification)
 
 **NOTE**: You can also replace localhost with 127.0.0.1
+
+#### Testing
+
+Tests are added only for **app-service**!
+
+You can run it using:
+```bash
+cd app-service/ && npm test
+```
+
+<img src="https://raw.githubusercontent.com/fave77/taskone/main/.github/screenshot6.png">
 
 ## View
 
