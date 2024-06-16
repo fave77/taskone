@@ -1,6 +1,8 @@
 # TASKONE
 A todo webapp for creating and managing tasks! 📝
 
+Application Link - http://ec2-43-204-103-180.ap-south-1.compute.amazonaws.com/
+
 ## Features
 - Users can create profile, logout or delete profile
 - Users can create, view, update and delete tasks

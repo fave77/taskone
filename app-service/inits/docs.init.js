@@ -6,7 +6,13 @@ const swaggerDefinition = {
     title: 'Taskone Api Specs',
     version: '1.0.0',
     description: 'These APIs are responsible for handling user journey.',
-  }
+  },
+  servers: [
+    {
+      url: process.env.BASE_URL,
+      description: 'EC2 Public DNS server'
+    }
+  ]
 };
 
 const options = {
