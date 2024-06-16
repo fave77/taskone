@@ -100,9 +100,16 @@ If you have made it this far without any issues, just head over to your browser,
 
 ## Known Issues
 
-Reminder Feature is implemented using Service workers, and for the push notification to work, Chrome requires SSL certification. Hence, this feature is not working as expected when running locally.
+- Reminder Feature is implemented using Service workers in browsers, and for the push notification to work, Chrome requires SSL certification. Hence, this feature is not working as expected over HTTP.
 
-However, it has been tested with Safari, and it works 😇
+- Swagger Docs has certain security policies in place that require HTTPS. The docs are also not available over HTTP.
+
+Please note, these issues only exist in the hosted application but its working fine in local environment.
+
+In local env:
+- Reminder Feature has been tested on Safari
+- Swagger Docs are available in all browsers
+
 
 ## License
 
